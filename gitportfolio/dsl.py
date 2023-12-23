@@ -1,5 +1,6 @@
 import importlib
 import re
+import sys
 import typing
 
 from gitportfolio.exceptions import GitPortfolioError
@@ -12,7 +13,6 @@ from gitportfolio.logger import get_logger
 
 def get_data_from_source(
     config: dict,
-    custom_datasources_folder: str,
     data_source_name: str,
 ) -> list[OrganisationFacade | RepositoryFacade]:
     get_logger().info(f'The data source "{data_source_name}" will be queried.')
@@ -38,12 +38,10 @@ def get_data_from_source(
         )
     else:
         try:
-            module = importlib.import_module(
-                "." + data_source_name,
-                package=custom_datasources_folder,
-            )
+            module = importlib.import_module(data_source_name)
 
-            data = getattr(module, data_source_name)()
+            repos = list(get_repos(config, orgs))
+            data = getattr(module, data_source_name)(repos)
         except (ImportError, AttributeError) as e:
             raise CustomFunctionNotImplementedError from e
 
@@ -73,7 +71,6 @@ def apply_operation(
 
 def parse_single_query(
     config: dict,
-    custom_datasources_folder: str,
     query: str,
 ) -> str:
     if query.count("|") != 1:
@@ -83,7 +80,7 @@ def parse_single_query(
 
     get_logger().info(f'The query "{query}" will be evaluated.')
 
-    data = get_data_from_source(config, custom_datasources_folder, data_source)
+    data = get_data_from_source(config, data_source)
 
     return apply_operation(data, operation)
 
@@ -92,9 +89,11 @@ def parse(config: dict, custom_datasources_folder: str, text: str) -> str:
     def replace_by_parsing(match: re.Match) -> str:
         query = match.group(1)
 
-        return parse_single_query(config, custom_datasources_folder, query)
+        return parse_single_query(config, query)
 
     get_logger().info("A parametrized text will be parsed.")
+
+    sys.path.append(custom_datasources_folder)
 
     return re.sub(
         r"<!-- gitportfolio: ([a-zA-Z_|]+) -->",
