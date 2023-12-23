@@ -4,6 +4,8 @@ import typing
 
 from tabulate import tabulate
 
+from gitportfolio.logger import get_logger
+
 if typing.TYPE_CHECKING:
     from gitportfolio.facade import OrganisationFacade, RepositoryFacade
 
@@ -20,6 +22,8 @@ def tinify(text: str) -> str:
 
 
 def to_repo_table(repos: list[RepositoryFacade]) -> str:
+    get_logger().info("A list of repositories will be formatted as a table.")
+
     data = []
     for repo in repos:
         identifier = (
@@ -69,6 +73,8 @@ def to_list(
     *,
     is_phrased: bool = True,
 ) -> str:
+    get_logger().info("A list of objects will be formatted as a list.")
+
     count = len(items)
 
     return "\n".join(

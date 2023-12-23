@@ -7,6 +7,7 @@ from gitportfolio.facade import OrganisationFacade, RepositoryFacade
 from gitportfolio.filters import RepositoryFacadePrivateFilter, filter_repos
 from gitportfolio.formatter import to_list, to_repo_table
 from gitportfolio.github import get_orgs, get_repos
+from gitportfolio.logger import get_logger
 
 
 def get_data_from_source(
@@ -14,6 +15,8 @@ def get_data_from_source(
     custom_datasources_folder: str,
     data_source_name: str,
 ) -> list[OrganisationFacade | RepositoryFacade]:
+    get_logger().info(f'The data source "{data_source_name}" will be queried.')
+
     orgs = list(get_orgs(config))
 
     data: typing.Any = None
@@ -51,6 +54,8 @@ def apply_operation(
     data: list[OrganisationFacade | RepositoryFacade],
     operation: str,
 ) -> str:
+    get_logger().info(f'The operation "{operation}" will be applied.')
+
     if operation == "count":
         return str(len(data))
 
@@ -76,6 +81,8 @@ def parse_single_query(
 
     data_source, operation = query.split("|")
 
+    get_logger().info(f'The query "{query}" will be evaluated.')
+
     data = get_data_from_source(config, custom_datasources_folder, data_source)
 
     return apply_operation(data, operation)
@@ -86,6 +93,8 @@ def parse(config: dict, custom_datasources_folder: str, text: str) -> str:
         query = match.group(1)
 
         return parse_single_query(config, custom_datasources_folder, query)
+
+    get_logger().info("A parametrized text will be parsed.")
 
     return re.sub(
         r"<!-- gitportfolio: ([a-zA-Z_|]+) -->",

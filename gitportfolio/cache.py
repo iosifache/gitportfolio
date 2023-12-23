@@ -4,6 +4,8 @@ import pickle
 import typing
 from pathlib import Path
 
+from gitportfolio.logger import get_logger
+
 REPOS_BACKUP = "repos.pickle"
 
 if typing.TYPE_CHECKING:
@@ -17,9 +19,13 @@ def dump_repos_to_file(
     with Path(cache_folder).joinpath(REPOS_BACKUP).open(mode="wb") as file:
         file.write(pickle.dumps(repos))
 
+        get_logger().info("The repos were dumped into the cache file.")
+
 
 def get_cached_repos(cache_folder: str) -> list[RepositoryFacade]:
     with Path(cache_folder).joinpath(REPOS_BACKUP).open(mode="rb") as file:
-        content = file.read()
+        content = pickle.loads(file.read())
 
-        return pickle.loads(content)
+        get_logger().info("The repos were read from the cache.")
+
+        return content

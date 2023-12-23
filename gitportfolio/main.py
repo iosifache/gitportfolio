@@ -4,10 +4,12 @@ import typing
 from pathlib import Path
 
 import click
+
 from gitportfolio.cache import dump_repos_to_file, get_cached_repos
 from gitportfolio.config import read_config
 from gitportfolio.dsl import parse
 from gitportfolio.github import get_orgs, get_repos
+from gitportfolio.logger import disable_logger
 from gitportfolio.sorters import sort_repos_by_member
 
 if typing.TYPE_CHECKING:
@@ -47,8 +49,13 @@ if typing.TYPE_CHECKING:
 )
 @click.option(
     "--caching/--no-caching",
-    default=False,
+    default=True,
     help="Boolean indicating if caching is enabled",
+)
+@click.option(
+    "--verbose",
+    default=False,
+    help="Boolean indicating if information will be logged",
 )
 def main(
     config: str,
@@ -57,8 +64,12 @@ def main(
     template: str,
     output: str,
     *,
-    caching: bool = True,
+    caching: bool,
+    verbose: bool,
 ) -> None:
+    if not verbose:
+        disable_logger()
+
     configuration = read_config(config)
 
     repos: list[RepositoryFacade] = []

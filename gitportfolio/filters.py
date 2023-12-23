@@ -3,8 +3,10 @@ from __future__ import annotations
 from abc import abstractmethod
 from typing import TYPE_CHECKING
 
+from gitportfolio.logger import get_logger
+
 if TYPE_CHECKING:
-    from facade import RepositoryFacade
+    from gitportfolio.facade import RepositoryFacade
 
 
 class RepositoryFacadeFilter:
@@ -85,4 +87,9 @@ def filter_repos(
     repos: list[RepositoryFacade],
     custom_filter: RepositoryFacadeFilter,
 ) -> list[RepositoryFacade]:
+    get_logger().info(
+        "A list of repositories will be filtered with"
+        f" {custom_filter.__class__.__name__}.",
+    )
+
     return [repo for repo in repos if custom_filter.is_accepted(repo)]

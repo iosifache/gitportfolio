@@ -8,6 +8,7 @@ import yaml
 
 from gitportfolio.exceptions import GitPortfolioError
 from gitportfolio.filters import RepositoryFacadePrivateFilter, filter_repos
+from gitportfolio.logger import get_logger
 
 if typing.TYPE_CHECKING:
     from gitportfolio.facade import RepositoryFacade
@@ -15,7 +16,11 @@ if typing.TYPE_CHECKING:
 
 def read_config(filename: str) -> dict:
     with Path(filename).open(mode="r", encoding="utf-8") as file:
-        return yaml.safe_load(file.read())
+        configuration = yaml.safe_load(file.read())
+
+        get_logger().info("The configuration was read.")
+
+        return configuration
 
 
 def get_repos_not_in_config(
@@ -29,6 +34,10 @@ def get_repos_not_in_config(
 
     for repo in public_repos:
         if repo.name not in config["repos"]:
+            get_logger().info(
+                f"The repository {repo.name} is not configured.",
+            )
+
             yield repo
 
 
@@ -37,6 +46,10 @@ def get_github_pat() -> str:
 
     if not pat:
         raise GitHubPatNotSetError
+
+    get_logger().info(
+        "The GitHub personal access token was found.",
+    )
 
     return pat
 

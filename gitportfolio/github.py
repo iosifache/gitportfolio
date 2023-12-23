@@ -3,8 +3,10 @@ from __future__ import annotations
 import typing
 
 from github import Auth, Github
+
 from gitportfolio.config import get_github_pat
 from gitportfolio.facade import OrganisationFacade, RepositoryFacade
+from gitportfolio.logger import get_logger
 
 if typing.TYPE_CHECKING:
     from github.Repository import Repository
@@ -59,6 +61,10 @@ def get_repos(
 
     for repo in github_client.get_user().get_repos():
         if is_repo_skipped(orgs, repo):
+            get_logger().info(
+                f"The repository {repo.name} was skipped.",
+            )
+
             continue
 
         repo_facade = create_repo_facade(repo, config)
@@ -68,6 +74,10 @@ def get_repos(
         repo_facade.tags = repo_config.get("tags", [])
 
         repos.append(repo_facade)
+
+        get_logger().info(
+            f"The repository {repo_facade.name} was fetched from GitHub.",
+        )
 
         yield repo_facade
 
@@ -95,6 +105,10 @@ def get_orgs(config: dict) -> typing.Generator[OrganisationFacade, None, None]:
         org_facade.excluded = org_config.get("excluded", False)
 
         orgs.append(org_facade)
+
+        get_logger().info(
+            f"The organisation {org_facade.name} was fetched from GitHub.",
+        )
 
         yield org_facade
 
