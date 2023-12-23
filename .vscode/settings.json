@@ -1,0 +1,34 @@
+{
+    /* Editor's aspect */
+    "editor.wordWrap": "on",
+    "editor.rulers": [
+        80
+    ],
+
+    /* Hidden files in file explorer */
+    "files.exclude": {
+        ".coverage": true,
+        ".dccache": true,
+        ".git": true,
+        ".mypy_cache": true,
+        ".venv": true,
+        "dist": true,
+        "poetry.lock": true,
+        ".ruff_cache": true
+    },
+
+    /* Editor's automatic actions */
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.fixAll": "explicit"
+    },
+    "editor.formatOnSave": true,
+
+    /* Listing and automatic formatting */
+    "json.format.keepLines": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "${workspaceFolder}/.venv/bin/black",
+    "python.linting.mypyEnabled": true,
+    "python.linting.mypyPath": "${workspaceFolder}/.venv/bin/mypy",
+    "ruff.path": [ ".venv/bin/ruff" ],
+}

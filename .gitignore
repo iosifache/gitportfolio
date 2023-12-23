@@ -1,0 +1,14 @@
+# Poetry
+/.venv/
+/dist/
+/poetry.lock
+/.ruff_cache
+
+# Python
+**/__pycache__
+/.mypy_cache
+/.coverage
+
+# Cache
+/cache/**
+!/cache/.gitkeep
