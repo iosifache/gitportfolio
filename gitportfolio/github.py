@@ -3,14 +3,12 @@ from __future__ import annotations
 import typing
 
 from github import Auth, Github
+from github.Repository import Repository
 
 from gitportfolio.cache import Cache
 from gitportfolio.config import get_github_pat
 from gitportfolio.facade import OrganisationFacade, RepositoryFacade
 from gitportfolio.logger import get_logger
-
-if typing.TYPE_CHECKING:
-    from github.Repository import Repository
 
 REPOS_CACHE_KEY = "repos"
 ORGS_CACHE_KEY = "orgs"
@@ -71,16 +69,32 @@ def create_repo_facade(repo: Repository, config: dict) -> RepositoryFacade:
 
 
 def is_repo_skipped(
+    config: dict,
     orgs: list[OrganisationFacade],
-    repo: Repository,
+    repo: Repository | RepositoryFacade,
 ) -> bool:
-    owner = repo.owner.login
-
+    owner = repo.owner.login if type(repo) == Repository else repo.owner
     get_logger().info(
         f'Checking if the repository "{owner}/{repo.name}" should be skipped.',
     )
 
+    repo_config = config["repos"].get(repo.name, {}).get("shown", True)
+    if not repo_config:
+        return True
+
     return any(org.login == owner and org.excluded for org in orgs)
+
+
+def update_meta_from_config(
+    config: dict,
+    repo: RepositoryFacade,
+) -> RepositoryFacade:
+    repo_config = config["repos"].get(repo.name, {})
+
+    repo.is_shown = repo_config.get("shown", True)
+    repo.tags = repo_config.get("tags", [])
+
+    return repo
 
 
 def get_repos(
@@ -94,12 +108,22 @@ def get_repos(
 
     repos = Cache().get_cached_object(REPOS_CACHE_KEY)
     if repos:
-        yield from repos
+        for repo in repos:
+            repo = update_meta_from_config(config, repo)
+
+            if is_repo_skipped(config, orgs, repo):
+                get_logger().info(
+                    f'The repository "{repo.name}" was skipped.',
+                )
+
+                continue
+
+            yield repo
 
     else:
         repos = []
         for repo in github_client.get_user().get_repos():
-            if is_repo_skipped(orgs, repo):
+            if is_repo_skipped(config, orgs, repo):
                 get_logger().info(
                     f'The repository "{repo.name}" was skipped.',
                 )
@@ -107,12 +131,7 @@ def get_repos(
                 continue
 
             repo_facade = create_repo_facade(repo, config)
-
-            repo_config = config["repos"].get(repo_facade.name, {})
-            repo_facade.is_shown = repo_config.get("shown", True)
-            repo_facade.tags = repo_config.get("tags", [])
-
-            repos.append(repo_facade)
+            repo_facade = update_meta_from_config(config, repo)
 
             get_logger().info(
                 f'The repository "{repo_facade.name}" was fetched from'
@@ -120,6 +139,7 @@ def get_repos(
             )
 
             if repo_facade.is_shown:
+                repos.append(repo_facade)
                 yield repo_facade
 
         Cache().cache_object(REPOS_CACHE_KEY, repos)
