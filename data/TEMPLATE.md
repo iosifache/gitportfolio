@@ -5,18 +5,18 @@
 
 #### Main focus
 
-<!-- gitportfolio: get_focused_repos|table -->
+<!-- gitportfolio: get_focused_repos|to_repo_table -->
 
 #### Contributions
 
-Currently, I'm a member of <!-- gitportfolio: orgs_count --> organisations on GitHub:
+Currently, I'm a member of <!-- gitportfolio: get_orgs|count --> organisations on GitHub:
 
-<!-- gitportfolio: orgs_list -->
+<!-- gitportfolio: get_orgs|to_list -->
 
 <details>
     <summary>Click here to see other <!-- gitportfolio: get_contribution_repos|count --> repositories to which I've contributed.</summary>
 
-<!-- gitportfolio: get_contribution_repos|table -->
+<!-- gitportfolio: get_contribution_repos|to_repo_table -->
 
 </details>
 
@@ -25,7 +25,7 @@ Currently, I'm a member of <!-- gitportfolio: orgs_count --> organisations on Gi
 <details>
     <summary>Click here to see the <!-- gitportfolio: get_archived_repos|count --> repositories to which I've contributed.</summary>
 
-<!-- gitportfolio: get_archived_repos|table -->
+<!-- gitportfolio: get_archived_repos|to_repo_table -->
 
 </details>
 
@@ -34,7 +34,7 @@ Currently, I'm a member of <!-- gitportfolio: orgs_count --> organisations on Gi
 <details>
     <summary>Click here to see the <!-- gitportfolio: get_education_repos|count --> repositories to which I've contributed.</summary>
 
-<!-- gitportfolio: get_education_repos|table -->
+<!-- gitportfolio: get_education_repos|to_repo_table -->
 
 </details>
 
