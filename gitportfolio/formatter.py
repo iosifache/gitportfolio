@@ -11,6 +11,9 @@ if typing.TYPE_CHECKING:
 
 
 def trim_text(text: str, max_length: int) -> str:
+    if not text:
+        return text
+
     if len(text) > max_length:
         return text[: max_length - 3] + "..."
 
@@ -18,6 +21,9 @@ def trim_text(text: str, max_length: int) -> str:
 
 
 def tinify(text: str) -> str:
+    if not text:
+        return text
+
     return "<sup><sub>" + text + "</sub></sup>"
 
 
@@ -26,6 +32,10 @@ def to_repo_table(repos: list[RepositoryFacade]) -> str:
 
     data = []
     for repo in repos:
+        get_logger().info(
+            f'Repository "{repo.name}" will be added to a table.',
+        )
+
         identifier = (
             f"[`{repo.owner}/{repo.name}`]"
             f"(https://github.com/{repo.owner}/{repo.name}) "

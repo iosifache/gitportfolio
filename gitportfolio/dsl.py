@@ -91,7 +91,7 @@ def parse(config: dict, custom_datasources_folder: str, text: str) -> str:
 
         return parse_single_query(config, query)
 
-    get_logger().info("A parametrized text will be parsed.")
+    get_logger().info("A parametrised text will be parsed.")
 
     sys.path.append(custom_datasources_folder)
 

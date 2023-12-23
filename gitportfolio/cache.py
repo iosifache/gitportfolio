@@ -4,28 +4,87 @@ import pickle
 import typing
 from pathlib import Path
 
+from gitportfolio.exceptions import GitPortfolioError
+from gitportfolio.helpers import Singleton
 from gitportfolio.logger import get_logger
 
-REPOS_BACKUP = "repos.pickle"
-
-if typing.TYPE_CHECKING:
-    from gitportfolio.facade import RepositoryFacade
+BACKUP_EXTENSION = ".pickle"
 
 
-def dump_repos_to_file(
-    cache_folder: str,
-    repos: list[RepositoryFacade],
-) -> None:
-    with Path(cache_folder).joinpath(REPOS_BACKUP).open(mode="wb") as file:
-        file.write(pickle.dumps(repos))
+class Cache(metaclass=Singleton):
+    disabled: bool
+    cache_folder: str
+    cache: dict[str, object] = {}
 
-        get_logger().info("The repos were dumped into the cache file.")
+    def __init__(
+        self,
+        cache_folder: str = "",
+        *,
+        disabled: bool = False,
+    ) -> None:
+        self.disabled = disabled
+
+        if not disabled and cache_folder == "":
+            raise UnspecifiedCacheFolderError
+
+        if disabled:
+            get_logger().info(
+                "The cache is disabled.",
+            )
+        else:
+            get_logger().info(
+                f'The cache was initialised with the folder "{cache_folder}".',
+            )
+
+        self.cache_folder = cache_folder
+
+    def cache_object(
+        self,
+        identifier: str,
+        obj: typing.Any,
+    ) -> None:
+        # In-memory caching
+        self.cache[identifier] = obj
+
+        # File-based caching
+        with Path(self.cache_folder).joinpath(
+            identifier + BACKUP_EXTENSION,
+        ).open(
+            mode="wb",
+        ) as file:
+            file.write(pickle.dumps(obj))
+
+            get_logger().info(
+                f'The object "{identifier}" were dumped into the cache file.',
+            )
+
+    def get_cached_object(self, identifier: str) -> typing.Any:
+        # Get from in-memory cache
+        obj = self.cache.get(identifier, None)
+        if obj is not None:
+            return obj
+
+        # Get from the file-based cache
+        path = Path(self.cache_folder).joinpath(
+            identifier + BACKUP_EXTENSION,
+        )
+
+        if not path.exists():
+            return None
+
+        with path.open(
+            mode="rb",
+        ) as file:
+            obj = pickle.loads(file.read())
+
+            self.cache[identifier] = obj
+
+            get_logger().info(
+                f'The object "{identifier}" was read from the cache.',
+            )
+
+            return obj
 
 
-def get_cached_repos(cache_folder: str) -> list[RepositoryFacade]:
-    with Path(cache_folder).joinpath(REPOS_BACKUP).open(mode="rb") as file:
-        content = pickle.loads(file.read())
-
-        get_logger().info("The repos were read from the cache.")
-
-        return content
+class UnspecifiedCacheFolderError(GitPortfolioError):
+    """The cache folder was not specified."""
