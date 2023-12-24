@@ -72,7 +72,7 @@ def apply_operation(
         if not type(data[0] in [OrganisationFacade, RepositoryFacade]):
             raise IncompatibleFormatterError
 
-        return to_list(data, is_phrased=True)  # type: ignore[arg-type]
+        return to_list(data)  # type: ignore[arg-type]
 
     if operation == "to_repo_table":
         if type(data[0]) is not RepositoryFacade:

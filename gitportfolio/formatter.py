@@ -81,7 +81,7 @@ def to_repo_table(repos: list[RepositoryFacade]) -> str:
 def to_list(
     items: list[RepositoryFacade | OrganisationFacade],
     *,
-    is_phrased: bool = True,
+    is_phrased: bool = False,
 ) -> str:
     get_logger().info("A list of objects will be formatted as a list.")
 
