@@ -91,10 +91,14 @@ class Configuration(metaclass=Singleton):
         orgs = list(get_orgs())
         repos = list(get_repos(orgs))
 
+        updates = 0
+
         for org in self.get_orgs_not_in_config(orgs):
             self.config["orgs"][org.login] = {
                 "excluded": False,
             }
+
+            updates += 1
 
         for repo in self.get_repos_not_in_config(repos):
             self.config["repos"][repo.name] = {
@@ -103,7 +107,9 @@ class Configuration(metaclass=Singleton):
                 "tags": [],
             }
 
-        if save:
+            updates += 1
+
+        if save and updates > 0:
             backup_filename = self.filename + ".bak"
             shutil.copyfile(self.filename, backup_filename)
 
