@@ -2,6 +2,7 @@ import importlib
 import re
 import sys
 import typing
+from datetime import datetime, timezone
 
 from gitportfolio.exceptions import GitPortfolioError
 from gitportfolio.facade import OrganisationFacade, RepositoryFacade
@@ -19,7 +20,11 @@ def get_data_from_source(
     orgs = list(get_orgs())
 
     data: typing.Any = None
-    if data_source_name == "get_orgs":
+    if data_source_name == "now":
+        data = (
+            datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M") + " UTC"
+        )
+    elif data_source_name == "get_orgs":
         data = orgs
     elif data_source_name == "get_repos":
         data = get_repos(orgs)
@@ -52,6 +57,9 @@ def apply_operation(
     operation: str,
 ) -> str:
     get_logger().info(f'The operation "{operation}" will be applied.')
+
+    if operation == "str":
+        return str(data)
 
     if operation == "count":
         return str(len(data))
