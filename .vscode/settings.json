@@ -14,7 +14,8 @@
         ".venv": true,
         "dist": true,
         "poetry.lock": true,
-        ".ruff_cache": true
+        ".ruff_cache": true,
+        "**/__pycache__": true
     },
 
     /* Editor's automatic actions */
