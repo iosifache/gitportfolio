@@ -1,0 +1,71 @@
+name: GitPortfolio
+description: Opinionated template engine analysing your GitHub profile and repositories
+author: George-Andrei Iosif
+branding:
+  icon: user
+  color: gray-dark
+inputs:
+  config:
+    description: Configuration file
+    required: true
+  pat:
+    description: GitHub PAT
+    required: true
+  cache:
+    description: Cache folder
+    required: false
+    default: '/tmp'
+  datasources:
+    description: Custom datasources folder
+    required: true
+  template:
+    description: Template file
+    required: true
+  output:
+    description: Output file
+    required: true
+  caching:
+    description: Boolean indicating if caching is enabled
+    required: false
+    default: "false"
+  verbose:
+    description: Boolean indicating if information will be logged
+    required: false
+    default: "true"
+  update:
+    description: Boolean indicating if the configuration should be updated
+    required: false
+    default: "false"
+runs:
+  using: 'composite'
+  steps:
+    - name: Install GitPortfolio
+      shell: bash
+      run: |
+        pip install githubportfolio
+    - name: Run GitPortfolio
+      shell: bash
+      env:
+        GITHUB_PAT: ${{ github.event.inputs.pat }}
+      run: |
+        args=()
+
+        if [[ "${{ github.event.inputs.caching }}" = "true" ]]; then
+            args+=(--caching)
+        fi
+
+        if [[ "${{ github.event.inputs.verbose }}" = "true" ]]; then
+            args+=(--verbose)
+        fi
+
+        if [[ "${{ github.event.inputs.update }}" = "true" ]]; then
+            args+=(--update)
+        fi
+
+        gitportfolio                                            \
+          --config ${{ github.event.inputs.config }}            \
+          --cache ${{ github.event.inputs.cache }}              \
+          --datasources ${{ github.event.inputs.datasources }}  \
+          --template ${{ github.event.inputs.template }}        \
+          --output ${{ github.event.inputs.output }}            \
+          "${args[@]}"
