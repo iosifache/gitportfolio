@@ -14,7 +14,7 @@ inputs:
   cache:
     description: Cache folder
     required: false
-    default: '/tmp'
+    default: './cache'
   datasources:
     description: Custom datasources folder
     required: true
@@ -31,25 +31,30 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install GitPortfolio
+    - name: Clones the latest version of GitPortfolio
+      uses: actions/checkout@v4
+      with:
+        repository: iosifache/gitportfolio
+        path: ./gitportfolio
+    - name: Installs GitPortfolio
       shell: bash
-      run: |
-        pip install githubportfolio
+      run: pip install ./gitportfolio
     - name: Run GitPortfolio
       shell: bash
       env:
-        GITHUB_PAT: ${{ github.event.inputs.pat }}
+        GITHUB_PAT: ${{ inputs.pat }}
       run: |
         args=()
 
-        if [[ "${{ github.event.inputs.update }}" = "true" ]]; then
+        if [[ "${{ inputs.update }}" = "true" ]]; then
             args+=(--update)
         fi
 
-        gitportfolio                                            \
-          --config ${{ github.event.inputs.config }}            \
-          --cache ${{ github.event.inputs.cache }}              \
-          --datasources ${{ github.event.inputs.datasources }}  \
-          --template ${{ github.event.inputs.template }}        \
-          --output ${{ github.event.inputs.output }}            \
-          "${args[@]}"
+        gitportfolio                               \
+          --config ${{ inputs.config }}            \
+          --cache ${{ inputs.cache }}              \
+          --datasources ${{ inputs.datasources }}  \
+          --template ${{ inputs.template }}        \
+          --output ${{ inputs.output }}            \
+          "${args[@]}"                             \
+          2>/dev/null
