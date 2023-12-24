@@ -60,9 +60,9 @@ class Configuration(metaclass=Singleton):
         orgs: list[OrganisationFacade],
     ) -> typing.Generator[OrganisationFacade, None, None]:
         for org in orgs:
-            if org.name not in self.config["orgs"]:
+            if org.login not in self.config["orgs"]:
                 get_logger().warn(
-                    f'The organisation "{org.name}" is not configured.',
+                    f'The organisation "{org.login}" is not configured.',
                 )
 
                 yield org
@@ -92,7 +92,7 @@ class Configuration(metaclass=Singleton):
         repos = list(get_repos(orgs))
 
         for org in self.get_orgs_not_in_config(orgs):
-            self.config["orgs"][org.name] = {
+            self.config["orgs"][org.login] = {
                 "excluded": False,
             }
 
