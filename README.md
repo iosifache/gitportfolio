@@ -164,8 +164,8 @@ Most of the GitPortfolio arguments and flags used above are optional. Please che
 
     ```yaml
     - name: Run GitPortfolio
-    uses: iosifache/gitportfolio@main
-    with:
+      uses: iosifache/gitportfolio@main
+      with:
         config: config.yaml                 # Path to the configuration
         pat: ${{ secrets.pat }}             # GitHub PAT, as a secret
         datasources: custom_datasources     # Folder with custom data sources
