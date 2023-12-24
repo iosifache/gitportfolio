@@ -6,11 +6,19 @@
     <a href="https://pypi.org/project/githubportfolio">
         <img src="https://img.shields.io/pypi/v/githubportfolio?label=PyPi&color=1c8223" height="17" alt="PyPI's Version">
     </a>
+    &nbsp; &nbsp;
+    <a href="https://github.com/marketplace/actions/run-gitportfolio">
+        <img src="https://img.shields.io/badge/Github_Action-available-1c8223" height="17" alt="Available GitHub Action">
+    </a>
 </p>
 
 ## Description
 
 **GitPortfolio** is **an opinionated template engine that replaces placeholders in files with data derived from an analysis of your GitHub profile and repositories**. When the tool is run repeatedly, it also uses a **cache** to reduce the amount of queries to the GitHub API.
+
+The tool, which was designed to automatically update GitHub profile READMEs and blog pages, is also available as [a GitHub action](https://github.com/marketplace/actions/run-gitportfolio).
+
+[This GitHub profile](https://github.com/iosifache#user-profile-frame) exemplifies how GitPortfolio can be used.
 
 ## Data sources
 
@@ -120,16 +128,19 @@ The file might be empty because all members are optional.
 
 ## Usage
 
+Regardless of the environment in which it runs, GitPorfolio requires a GitHub personal access token (PAT) to authenticate the requests to the GitHub API. Follow [the official guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub PAT. Its value will be referenced as `<github_pat>` in the next sections.
+
+### Local
+
 1. Install GitPorfolio: `pip install githubportfolio`
-2. GitPorfolio requires a GitHub personal access token (PAT) to authenticate the requests to the GitHub API. Follow [the official guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub PAT. Its value will be referenced as `<github_pat>` in the next sections.
-3. Set the GitHub PAT as an environment variable:
+2. Set the GitHub PAT as an environment variable:
 
     ```bash
     export GITHUB_PAT="<github_pat>"
     ```
 
-4. Create a configuration respecting [the format](#configuration).
-5. Run the engine over a template.
+3. Create a configuration respecting [the format](#configuration).
+4. Run the engine over a template.
 
     ```bash
     gitportfolio                            \
@@ -145,6 +156,24 @@ The file might be empty because all members are optional.
     ```
 
 Most of the GitPortfolio arguments and flags used above are optional. Please check the manual (`gitportfolio --help`) to deduce what parameters fit your needs.
+
+### On GitHub workflows
+
+1. Create a new secret in the repository that will contain the workflow.
+2. Embed the following step (leveraging [the GitPortfolio GitHub action](https://github.com/marketplace/actions/run-gitportfolio)) into your workflow definition file:
+
+    ```yaml
+    - name: Run GitPortfolio
+    uses: iosifache/gitportfolio@main
+    with:
+        config: config.yaml                 # Path to the configuration
+        pat: ${{ secrets.pat }}             # GitHub PAT, as a secret
+        datasources: custom_datasources     # Folder with custom data sources
+        template: TEMPLATE.md               # Template document
+        output: PROFILE.md                  # Output file
+    ```
+
+You can see a full example of a workflow file [here](https://github.com/iosifache/iosifache/blob/main/.github/workflows/update-readme.yaml).
 
 ## Further improvements
 
