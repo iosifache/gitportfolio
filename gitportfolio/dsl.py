@@ -14,7 +14,7 @@ from gitportfolio.logger import get_logger
 
 def get_data_from_source(
     data_source_name: str,
-) -> list[OrganisationFacade | RepositoryFacade]:
+) -> list[OrganisationFacade | RepositoryFacade | datetime]:
     get_logger().info(f'The data source "{data_source_name}" will be queried.')
 
     orgs = list(get_orgs())
