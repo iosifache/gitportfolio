@@ -24,14 +24,6 @@ inputs:
   output:
     description: Output file
     required: true
-  caching:
-    description: Boolean indicating if caching is enabled
-    required: false
-    default: "false"
-  verbose:
-    description: Boolean indicating if information will be logged
-    required: false
-    default: "true"
   update:
     description: Boolean indicating if the configuration should be updated
     required: false
@@ -49,14 +41,6 @@ runs:
         GITHUB_PAT: ${{ github.event.inputs.pat }}
       run: |
         args=()
-
-        if [[ "${{ github.event.inputs.caching }}" = "true" ]]; then
-            args+=(--caching)
-        fi
-
-        if [[ "${{ github.event.inputs.verbose }}" = "true" ]]; then
-            args+=(--verbose)
-        fi
 
         if [[ "${{ github.event.inputs.update }}" = "true" ]]; then
             args+=(--update)
