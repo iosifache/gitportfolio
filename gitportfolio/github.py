@@ -6,7 +6,7 @@ from github import Auth, Github
 from github.Repository import Repository
 
 from gitportfolio.cache import Cache
-from gitportfolio.config import get_github_pat
+from gitportfolio.config import Configuration
 from gitportfolio.facade import OrganisationFacade, RepositoryFacade
 from gitportfolio.logger import get_logger
 
@@ -17,9 +17,12 @@ orgs: list[OrganisationFacade] = []
 repos: list[RepositoryFacade] = []
 
 
-def get_orgs(config: dict) -> typing.Generator[OrganisationFacade, None, None]:
+def get_orgs() -> typing.Generator[OrganisationFacade, None, None]:
+    config = Configuration().get_config()
+    pat = Configuration().get_github_pat()
+
     auth = Auth.Token(
-        get_github_pat(),
+        pat,
     )
     github_client = Github(auth=auth)
 
@@ -49,7 +52,8 @@ def get_orgs(config: dict) -> typing.Generator[OrganisationFacade, None, None]:
     github_client.close()
 
 
-def create_repo_facade(repo: Repository, config: dict) -> RepositoryFacade:
+def create_repo_facade(repo: Repository) -> RepositoryFacade:
+    config = Configuration().get_config()
     repo_config = config["repos"].get(repo.name, {})
 
     return RepositoryFacade(
@@ -69,10 +73,11 @@ def create_repo_facade(repo: Repository, config: dict) -> RepositoryFacade:
 
 
 def is_repo_skipped(
-    config: dict,
     orgs: list[OrganisationFacade],
     repo: Repository | RepositoryFacade,
 ) -> bool:
+    config = Configuration().get_config()
+
     owner = repo.owner.login if type(repo) == Repository else repo.owner
     get_logger().info(
         f'Checking if the repository "{owner}/{repo.name}" should be skipped.',
@@ -86,9 +91,9 @@ def is_repo_skipped(
 
 
 def update_meta_from_config(
-    config: dict,
     repo: RepositoryFacade,
 ) -> RepositoryFacade:
+    config = Configuration().get_config()
     repo_config = config["repos"].get(repo.name, {})
 
     repo.is_shown = repo_config.get("shown", True)
@@ -98,20 +103,22 @@ def update_meta_from_config(
 
 
 def get_repos(
-    config: dict,
     orgs: list[OrganisationFacade],
 ) -> typing.Generator[RepositoryFacade, None, None]:
+    Configuration().get_config()
+    pat = Configuration().get_github_pat()
+
     auth = Auth.Token(
-        get_github_pat(),
+        pat,
     )
     github_client = Github(auth=auth)
 
     repos = Cache().get_cached_object(REPOS_CACHE_KEY)
     if repos:
         for repo in repos:
-            repo = update_meta_from_config(config, repo)
+            repo = update_meta_from_config(repo)
 
-            if is_repo_skipped(config, orgs, repo):
+            if is_repo_skipped(orgs, repo):
                 get_logger().info(
                     f'The repository "{repo.name}" was skipped.',
                 )
@@ -123,15 +130,15 @@ def get_repos(
     else:
         repos = []
         for repo in github_client.get_user().get_repos():
-            if is_repo_skipped(config, orgs, repo):
+            if is_repo_skipped(orgs, repo):
                 get_logger().info(
                     f'The repository "{repo.name}" was skipped.',
                 )
 
                 continue
 
-            repo_facade = create_repo_facade(repo, config)
-            repo_facade = update_meta_from_config(config, repo)
+            repo_facade = create_repo_facade(repo)
+            repo_facade = update_meta_from_config(repo)
 
             get_logger().info(
                 f'The repository "{repo_facade.name}" was fetched from'

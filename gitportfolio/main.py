@@ -5,7 +5,7 @@ from pathlib import Path
 import click
 
 from gitportfolio.cache import Cache
-from gitportfolio.config import read_config
+from gitportfolio.config import Configuration
 from gitportfolio.dsl import parse
 from gitportfolio.logger import disable_logger
 
@@ -51,6 +51,11 @@ from gitportfolio.logger import disable_logger
     default=False,
     help="Boolean indicating if information will be logged",
 )
+@click.option(
+    "--update/--no-update",
+    default=False,
+    help="Boolean indicating if the configuration should be updated",
+)
 def main(
     config: str,
     cache: str,
@@ -60,20 +65,22 @@ def main(
     *,
     caching: bool,
     verbose: bool,
+    update: bool,
 ) -> None:
     if not verbose:
         disable_logger()
 
-    configuration = read_config(config)
-
+    configuration = Configuration(config)
     Cache(cache, disabled=(not caching))
 
     with Path(template).open(mode="r") as template_file:
         template = template_file.read()
-        readme = parse(configuration, datasources, template)
+        readme = parse(datasources, template)
 
     with Path(output).open(mode="w") as output_file:
         output_file.write(readme)
+
+    configuration.update_config(save=update)
 
 
 if __name__ == "__main__":

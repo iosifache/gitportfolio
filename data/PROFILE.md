@@ -5,6 +5,9 @@
 
 #### Main focus
 
+<details>
+    <summary>Click here to see the 13 repositories.</summary>
+
 | Identifier                                                                                                                         | Description                                                              | Tags                                                      | Metadata                                                                                                                                                                                                                                                                                                                            |
 |------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | <sup><sub>[`iosifache/cookiecutter-minimal-python`](https://github.com/iosifache/cookiecutter-minimal-python) </sub></sup>         | <sup><sub>Cookiecutter template for creating Python 3 pro...</sub></sup> | <sup><sub>`#development`</sub></sup>                      | <img height='12px' alt='Created on: Feb%202023' src='https://img.shields.io/badge/Created%20on-Feb%202023-black'/> <img height='12px' alt='Last push on: Dec%202023' src='https://img.shields.io/badge/Last%20push%20on-Dec%202023-green'/> <img height='12px' alt='Stars: 0' src='https://img.shields.io/badge/Stars-0-yellow'/>   |
@@ -21,6 +24,8 @@
 | <sup><sub>[`iosifache/semgrep-snap`](https://github.com/iosifache/semgrep-snap) </sub></sup>                                       | <sup><sub>The Semgrep code scanner as a snap 📦</sub></sup>               | <sup><sub>`#security`</sub></sup>                         | <img height='12px' alt='Created on: Jul%202023' src='https://img.shields.io/badge/Created%20on-Jul%202023-black'/> <img height='12px' alt='Last push on: Nov%202023' src='https://img.shields.io/badge/Last%20push%20on-Nov%202023-green'/> <img height='12px' alt='Stars: 1' src='https://img.shields.io/badge/Stars-1-yellow'/>   |
 | <sup><sub>[`iosifache/yanki`](https://github.com/iosifache/yanki) </sub></sup>                                                     | <sup><sub>Vocabulary manager, with a convertion from YAML...</sub></sup> |                                                           | <img height='12px' alt='Created on: Nov%202023' src='https://img.shields.io/badge/Created%20on-Nov%202023-black'/> <img height='12px' alt='Last push on: Nov%202023' src='https://img.shields.io/badge/Last%20push%20on-Nov%202023-green'/> <img height='12px' alt='Stars: 1' src='https://img.shields.io/badge/Stars-1-yellow'/>   |
 
+</details>
+
 #### Contributions
 
 Currently, I'm a member of 4 organisations on GitHub:
@@ -31,7 +36,7 @@ Currently, I'm a member of 4 organisations on GitHub:
 - [OpenCRS](https://github.com/CyberReasoningSystem).
 
 <details>
-    <summary>Click here to see other 18 repositories to which I've contributed.</summary>
+    <summary>Click here to see the 18 repositories.</summary>
 
 | Identifier                                                                                                                         | Description                                                              | Tags                                             | Metadata                                                                                                                                                                                                                                                                                                                            |
 |------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -59,7 +64,7 @@ Currently, I'm a member of 4 organisations on GitHub:
 #### Archived
 
 <details>
-    <summary>Click here to see the 10 repositories to which I've contributed.</summary>
+    <summary>Click here to see the 10 repositories.</summary>
 
 | Identifier                                                                                                        | Description                                                              | Tags                                             | Metadata                                                                                                                                                                                                                                                                                                                          |
 |-------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|--------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -79,7 +84,7 @@ Currently, I'm a member of 4 organisations on GitHub:
 #### Created during my studies
 
 <details>
-    <summary>Click here to see the 28 repositories to which I've contributed.</summary>
+    <summary>Click here to see the 28 repositories.</summary>
 
 | Identifier                                                                                                                      | Description                                                              | Tags                                                      | Metadata                                                                                                                                                                                                                                                                                                                            |
 |---------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|-----------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -116,7 +121,7 @@ Currently, I'm a member of 4 organisations on GitHub:
 
 #### Others
 
-Usually, I open source all the code I write, but I also have 11 private repositories which are embargoed due to various reasons.
+Usually, I open source all the code I write. I also have 11 private repositories which are embargoed due to various reasons.
 
 ---
 

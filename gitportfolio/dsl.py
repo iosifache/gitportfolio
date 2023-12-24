@@ -12,26 +12,25 @@ from gitportfolio.logger import get_logger
 
 
 def get_data_from_source(
-    config: dict,
     data_source_name: str,
 ) -> list[OrganisationFacade | RepositoryFacade]:
     get_logger().info(f'The data source "{data_source_name}" will be queried.')
 
-    orgs = list(get_orgs(config))
+    orgs = list(get_orgs())
 
     data: typing.Any = None
     if data_source_name == "get_orgs":
         data = orgs
     elif data_source_name == "get_repos":
-        data = get_repos(config, orgs)
+        data = get_repos(orgs)
     elif data_source_name == "get_public_repos":
-        repos = list(get_repos(config, orgs))
+        repos = list(get_repos(orgs))
         data = filter_repos(
             repos,
             RepositoryFacadePrivateFilter(is_private=False),
         )
     elif data_source_name == "get_private_repos":
-        repos = list(get_repos(config, orgs))
+        repos = list(get_repos(orgs))
         data = filter_repos(
             repos,
             RepositoryFacadePrivateFilter(is_private=True),
@@ -40,7 +39,7 @@ def get_data_from_source(
         try:
             module = importlib.import_module(data_source_name)
 
-            repos = list(get_repos(config, orgs))
+            repos = list(get_repos(orgs))
             data = getattr(module, data_source_name)(repos)
         except (ImportError, AttributeError) as e:
             raise CustomFunctionNotImplementedError from e
@@ -70,7 +69,6 @@ def apply_operation(
 
 
 def parse_single_query(
-    config: dict,
     query: str,
 ) -> str:
     if query.count("|") != 1:
@@ -80,20 +78,20 @@ def parse_single_query(
 
     get_logger().info(f'The query "{query}" will be evaluated.')
 
-    data = get_data_from_source(config, data_source)
+    data = get_data_from_source(data_source)
 
     return apply_operation(data, operation)
 
 
-def parse(config: dict, custom_datasources_folder: str, text: str) -> str:
-    def replace_by_parsing(match: re.Match) -> str:
-        query = match.group(1)
-
-        return parse_single_query(config, query)
-
+def parse(custom_datasources_folder: str, text: str) -> str:
     get_logger().info("A parametrised text will be parsed.")
 
     sys.path.append(custom_datasources_folder)
+
+    def replace_by_parsing(match: re.Match) -> str:
+        query = match.group(1)
+
+        return parse_single_query(query)
 
     return re.sub(
         r"<!-- gitportfolio: ([a-zA-Z_|]+) -->",
