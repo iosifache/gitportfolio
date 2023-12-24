@@ -1,6 +1,11 @@
-# GitPortfolio
+<p align="center">
+    <img src="others/banner.png" height="256" alt="GitPortfolio logo"/>
+</p>
+<h2 align="center">GitPortfolio</h2>
 
-GitPortfolio is **an opinionated template engine that replaces placeholders in files with data derived from an analysis of your GitHub profile and repositories**. When the tool is run repeatedly, it also uses a **cache** to reduce the amount of queries to the GitHub API.
+## Description
+
+**GitPortfolio** is **an opinionated template engine that replaces placeholders in files with data derived from an analysis of your GitHub profile and repositories**. When the tool is run repeatedly, it also uses a **cache** to reduce the amount of queries to the GitHub API.
 
 ## Data sources
 
@@ -141,3 +146,7 @@ A few aspects of GitPortfolio can be improved:
 
 - Support for repositories with the same name under different organisations; and
 - A YAML schema (based on the existing description from this document) for validating the configurations.
+
+## Acknowledgements
+
+This project's logo and banner were created with [Adobe Firefly](https://firefly.adobe.com).
