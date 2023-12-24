@@ -21,9 +21,7 @@ def get_data_from_source(
 
     data: typing.Any = None
     if data_source_name == "now":
-        data = (
-            datetime.now(tz=timezone.utc).strftime("%Y-%m-%d %H:%M") + " UTC"
-        )
+        data = datetime.now(tz=timezone.utc)
     elif data_source_name == "get_orgs":
         data = orgs
     elif data_source_name == "get_repos":
@@ -53,25 +51,34 @@ def get_data_from_source(
 
 
 def apply_operation(
-    data: list[OrganisationFacade | RepositoryFacade],
+    data: list[OrganisationFacade | RepositoryFacade | datetime],
     operation: str,
 ) -> str:
     get_logger().info(f'The operation "{operation}" will be applied.')
 
-    if operation == "str":
-        return str(data)
+    if operation == "to_utc_string":
+        if type(data) is not datetime:
+            raise IncompatibleFormatterError
+
+        return data.strftime("%Y-%m-%d %H:%M") + " UTC"  # type: ignore[attr-defined]
 
     if operation == "count":
-        return str(len(data))
+        if not type(data[0] in [OrganisationFacade, RepositoryFacade]):
+            raise IncompatibleFormatterError
+
+        return str(len(data))  # type: ignore[arg-type]
 
     if operation == "to_list":
-        return to_list(data, is_phrased=True)
+        if not type(data[0] in [OrganisationFacade, RepositoryFacade]):
+            raise IncompatibleFormatterError
+
+        return to_list(data, is_phrased=True)  # type: ignore[arg-type]
 
     if operation == "to_repo_table":
-        if not type(data[0] in [OrganisationFacade, RepositoryFacade]):
-            raise ToRepoListOverOrgsError
+        if type(data[0]) is not RepositoryFacade:
+            raise IncompatibleFormatterError
 
-        return to_repo_table(data)  # type: ignore # noqa: arg-type
+        return to_repo_table(data)  # type: ignore[arg-type]
 
     raise UnknownOperationError
 
@@ -116,8 +123,8 @@ class CustomFunctionNotImplementedError(GitPortfolioError):
     """The called custom function is not implemented."""
 
 
-class ToRepoListOverOrgsError(GitPortfolioError):
-    """The to_repo_table cannot be applied over a list of organisations."""
+class IncompatibleFormatterError(GitPortfolioError):
+    """A data source was used with an incompatible formatter."""
 
 
 class UnknownOperationError(GitPortfolioError):

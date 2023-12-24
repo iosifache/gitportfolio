@@ -27,7 +27,7 @@ from gitportfolio.logger import disable_logger
     "--datasources",
     type=click.Path(exists=True, dir_okay=True, file_okay=False),
     required=True,
-    help="Folder with custom implementation of datasources",
+    help="Folder with custom implementation of data sources",
 )
 @click.option(
     "--template",
