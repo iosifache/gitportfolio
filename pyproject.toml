@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "gitportfolio"
+name = "githubportfolio"
 version = "0.1.0"
-description = "GitHub action to generate a list of repositories"
+description = "Opinionated template engine analysing your GitHub profile and repositories"
 keywords = [
     "python",
     "github",
@@ -24,8 +24,6 @@ packages = [{include = "gitportfolio"}]
 [tool.poetry.urls]
 "Changelog" = "https://github.com/iosifache/gitportfolio/CHANGELOG.md"
 "Issue Tracker" = "https://github.com/iosifache/gitportfolio/issues"
-"LinkedIn" = ""
-"Twitter" = ""
 
 [tool.poetry.dependencies]
 python = "^3.11"

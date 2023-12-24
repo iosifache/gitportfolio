@@ -2,6 +2,11 @@
     <img src="others/banner.webp" height="256" alt="GitPortfolio logo"/>
 </p>
 <h2 align="center">GitPortfolio</h2>
+<p align="center" float="left">
+    <a href="https://pypi.org/project/githubportfolio">
+        <img src="https://img.shields.io/pypi/v/githubportfolio?label=PyPi&color=1c8223" height="17" alt="PyPI's Version">
+    </a>
+</p>
 
 ## Description
 
@@ -115,15 +120,16 @@ The file might be empty because all members are optional.
 
 ## Usage
 
-1. GitPorfolio requires a GitHub personal access token (PAT) to authenticate the requests to the GitHub API. Follow [the official guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub PAT. Its value will be referenced as `<github_pat>` in the next sections.
-2. Set the GitHub PAT as an environment variable:
+1. Install GitPorfolio: `pip install githubportfolio`
+2. GitPorfolio requires a GitHub personal access token (PAT) to authenticate the requests to the GitHub API. Follow [the official guide](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) to get a GitHub PAT. Its value will be referenced as `<github_pat>` in the next sections.
+3. Set the GitHub PAT as an environment variable:
 
     ```bash
     export GITHUB_PAT="<github_pat>"
     ```
 
-3. Create a configuration respecting [the format](#configuration).
-4. Run the engine over a template.
+4. Create a configuration respecting [the format](#configuration).
+5. Run the engine over a template.
 
     ```bash
     gitportfolio                            \
