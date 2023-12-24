@@ -9,10 +9,6 @@
 /.mypy_cache
 /.coverage
 
-# Cache
-/cache/**
-!/cache/.gitkeep
-
 # Data
 /data/**
 
