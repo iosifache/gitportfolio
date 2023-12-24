@@ -138,7 +138,7 @@ def get_repos(
                 continue
 
             repo_facade = create_repo_facade(repo)
-            repo_facade = update_meta_from_config(repo)
+            repo_facade = update_meta_from_config(repo_facade)
 
             get_logger().info(
                 f'The repository "{repo_facade.name}" was fetched from'

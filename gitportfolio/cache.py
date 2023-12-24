@@ -46,6 +46,9 @@ class Cache(metaclass=Singleton):
         # In-memory caching
         self.cache[identifier] = obj
 
+        if self.disabled:
+            return
+
         # File-based caching
         with Path(self.cache_folder).joinpath(
             identifier + BACKUP_EXTENSION,
@@ -63,6 +66,9 @@ class Cache(metaclass=Singleton):
         obj = self.cache.get(identifier, None)
         if obj is not None:
             return obj
+
+        if self.disabled:
+            return None
 
         # Get from the file-based cache
         path = Path(self.cache_folder).joinpath(
