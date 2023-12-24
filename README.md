@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="others/banner.png" height="256" alt="GitPortfolio logo"/>
+    <img src="others/banner.webp" height="256" alt="GitPortfolio logo"/>
 </p>
 <h2 align="center">GitPortfolio</h2>
 
