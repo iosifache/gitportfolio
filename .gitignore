@@ -12,3 +12,6 @@
 # Cache
 /cache/**
 !/cache/.gitkeep
+
+# Data
+/data/**
