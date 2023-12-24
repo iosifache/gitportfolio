@@ -12,10 +12,11 @@ from gitportfolio.filters import (
 )
 
 if TYPE_CHECKING:
-    from gitportfolio.facade import RepositoryFacade
+    from gitportfolio.facade import OrganisationFacade, RepositoryFacade
 
 
 def get_archived_repos(
+    _: list[OrganisationFacade],
     repos: list[RepositoryFacade],
 ) -> list[RepositoryFacade]:
     forks = filter_repos(

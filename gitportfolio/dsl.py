@@ -43,7 +43,7 @@ def get_data_from_source(
             module = importlib.import_module(data_source_name)
 
             repos = list(get_repos(orgs))
-            data = getattr(module, data_source_name)(repos)
+            data = getattr(module, data_source_name)(orgs, repos)
         except (ImportError, AttributeError) as e:
             raise CustomFunctionNotImplementedError from e
 

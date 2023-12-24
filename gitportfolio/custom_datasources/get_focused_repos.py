@@ -10,10 +10,11 @@ from gitportfolio.filters import (
 )
 
 if TYPE_CHECKING:
-    from gitportfolio.facade import RepositoryFacade
+    from gitportfolio.facade import OrganisationFacade, RepositoryFacade
 
 
 def get_focused_repos(
+    _: list[OrganisationFacade],
     repos: list[RepositoryFacade],
 ) -> list[RepositoryFacade]:
     repos = filter_repos(
